@@ -1,7 +1,5 @@
-
 generator client {
   provider = "prisma-client-js"
-  output   = "../generated/prisma"
 }
 
 datasource db {
@@ -9,33 +7,28 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum Role {
-  USER
-  ADMIN
-}
-
 model User {
   id        String   @id @default(cuid())
   name      String
-  email     String  @unique
+  email     String   @unique
   password  String
-  role      Role  @default(USER)
+  role      Role     @default(USER)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   reviews   Review[]
 }
 
-model Book{
-  id        String   @id @default(cuid())
-  title     String
-  author    String
-  published DateTime
-  rating    Float @default(0)
+model Book {
+  id          String   @id @default(cuid())
+  title       String
+  author      String
+  rating      Float    @default(0)
+  ratingCount Int      @default(0)
   description String
-  coverImage String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  reviews   Review[]
+  coverImage  String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  reviews     Review[]
 }
 
 model Review {
@@ -46,7 +39,11 @@ model Review {
   comment   String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  book      Book     @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  book Book @relation(fields: [bookId], references: [id], onDelete: Cascade)
+enum Role {
+  USER
+  ADMIN
 }
