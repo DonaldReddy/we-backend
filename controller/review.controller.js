@@ -14,7 +14,9 @@ export class ReviewController {
 
 			res.send(reviews);
 		} catch (error) {
-			res.status(400).send(error.message || "Internal server error");
+			res.status(400).json({
+				message: error.message || "Internal server error",
+			});
 		}
 	};
 
@@ -33,6 +35,12 @@ export class ReviewController {
 					.json({ message: "Comment and rating are required" });
 			}
 
+			if (rating < 1 || rating > 5) {
+				return res.status(400).json({
+					message: "Rating must be between 1 and 5",
+				});
+			}
+
 			const userId = req.user.id;
 
 			const review = await reviewService.addReview({
@@ -44,7 +52,9 @@ export class ReviewController {
 
 			res.status(201).send(review);
 		} catch (error) {
-			res.status(400).send(error.message || "Internal server error");
+			res.status(400).json({
+				message: error.message || "Internal server error",
+			});
 		}
 	};
 
@@ -58,7 +68,9 @@ export class ReviewController {
 			const refinedComment = await reviewService.refineReview(comment);
 			res.status(200).send(refinedComment);
 		} catch (error) {
-			res.status(400).send(error.message || "Internal server error");
+			res.status(400).json({
+				message: error.message || "Internal server error",
+			});
 		}
 	};
 }

@@ -27,7 +27,9 @@ export class AuthController {
 
 			res.status(200).send("Sign in successful");
 		} catch (error) {
-			res.status(400).send(error.message || "Internal server error");
+			res.status(400).json({
+				message: error.message || "Internal server error",
+			});
 		}
 	};
 
@@ -59,7 +61,9 @@ export class AuthController {
 
 			res.status(200).send("Sign up successful");
 		} catch (error) {
-			res.status(400).send(error.message || "Internal server error");
+			res.status(400).json({
+				message: error.message || "Internal server error",
+			});
 		}
 	};
 

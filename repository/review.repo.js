@@ -12,20 +12,25 @@ export class ReviewRepository {
 			include: {
 				user: true,
 			},
+			orderBy: {
+				createdAt: "desc",
+			},
 		});
 		return reviews;
 	};
 
 	addReview = async ({ bookId, userId, comment, rating }) => {
-		const review = await prisma.review.create({
-			data: {
-				bookId,
-				userId,
-				comment,
-				rating,
-			},
-        });
-        await bookingRepo.updateBookRating(bookId, rating);
-		return review;
+		return await prisma.$transaction(async (prisma) => {
+			const review = await prisma.review.create({
+				data: {
+					bookId,
+					userId,
+					comment,
+					rating,
+				},
+			});
+			await bookingRepo.updateBookRating(bookId, rating, prisma);
+			return review;
+		});
 	};
 }

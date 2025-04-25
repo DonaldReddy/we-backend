@@ -16,8 +16,6 @@ const corsOptions = {
 	credentials: true,
 };
 
-console.log(process.env.NODE_ENV);
-
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
@@ -29,10 +27,6 @@ app.use(jwtAuthentication);
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/books", bookRouter);
 app.use("/api/v1/reviews", reviewRouter);
-
-app.get("/", (req, res) => {
-	res.send("Hello World! This is the backend server.");
-});
 
 connectToDatabase()
 	.then(() => {

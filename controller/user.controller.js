@@ -3,7 +3,6 @@ import { UserService } from "../service/user.service.js";
 const userService = new UserService();
 
 export class UserController {
-
 	createUser = async (req, res) => {
 		try {
 			const { name, email, password } = req.body;
@@ -14,7 +13,9 @@ export class UserController {
 			const user = await userService.createUser({ name, email, password });
 			res.status(201).json(user);
 		} catch (error) {
-			res.status(400).send(error.message || "Internal server error");
+			res.status(400).json({
+				message: error.message || "Internal server error",
+			});
 		}
 	};
 
@@ -32,7 +33,9 @@ export class UserController {
 
 			res.status(200).json(user);
 		} catch (error) {
-			res.status(400).send(error.message || "Internal server error");
+			res.status(400).json({
+				message: error.message || "Internal server error",
+			});
 		}
 	};
 
@@ -61,7 +64,9 @@ export class UserController {
 
 			res.status(200).json(updatedUser);
 		} catch (error) {
-			res.status(400).send(error.message || "Internal server error");
+			res.status(400).json({
+				message: error.message || "Internal server error",
+			});
 		}
 	};
 }

@@ -15,7 +15,9 @@ export class BookController {
 			});
 			return res.send(books);
 		} catch (error) {
-			res.status(400).send(error.message || "Internal server error");
+			res.status(400).json({
+				message: error.message || "Internal server error",
+			});
 		}
 	};
 
@@ -28,7 +30,9 @@ export class BookController {
 			}
 			return res.send(book);
 		} catch (error) {
-			res.status(400).send(error.message || "Internal server error");
+			res.status(400).json({
+				message: error.message || "Internal server error",
+			});
 		}
 	};
 
@@ -49,7 +53,9 @@ export class BookController {
 
 			return res.status(201).send(book);
 		} catch (error) {
-			res.status(400).send(error.message || "Internal server error");
+			res.status(400).json({
+				message: error.message || "Internal server error",
+			});
 		}
 	};
 }

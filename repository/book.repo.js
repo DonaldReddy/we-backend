@@ -55,18 +55,23 @@ export class BookRepository {
 		return book;
 	};
 
-	updateBookRating = async (bookId, rating) => {
-		const book = await prisma.book.findUnique({
+	updateBookRating = async (bookId, rating, prismaTransaction) => {
+		let currentPrisma = prismaTransaction || prisma;
+
+		const book = await currentPrisma.book.findUnique({
 			where: {
 				id: bookId,
 			},
 		});
 
-		const aggregateRating = book.rating
-			? (book.rating * book.ratingCount + rating) / (book.ratingCount + 1)
-			: rating;
-		const bookCount = book.ratingCount ? book.ratingCount + 1 : 1;
-		await prisma.book.update({
+		if (!book) {
+			throw new Error("Book not found");
+		}
+
+		const aggregateRating =
+			(book.rating * book.ratingCount + rating) / (book.ratingCount + 1);
+		const bookCount = book.ratingCount + 1;
+		await currentPrisma.book.update({
 			where: {
 				id: bookId,
 			},
