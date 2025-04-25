@@ -60,12 +60,18 @@ export class ReviewController {
 
 	refineBookReview = async (req, res) => {
 		try {
-			const { comment } = req.body;
-			if (!comment) {
-				return res.status(400).json({ message: "Comment is required" });
+			const { review } = req.body;
+			if (!review) {
+				return res.status(400).json({ message: "Review is required" });
 			}
 
-			const refinedComment = await reviewService.refineReview(comment);
+			if (review.split(" ").length < 20) {
+				return res
+					.status(400)
+					.json({ message: "Review must be at least 20 words" });
+			}
+
+			const refinedComment = await reviewService.refineReview(review);
 			res.status(200).send(refinedComment);
 		} catch (error) {
 			res.status(400).json({
