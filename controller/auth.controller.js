@@ -25,7 +25,7 @@ export class AuthController {
 				sameSite: process.env.NODE_ENV == "production" ? "none" : "lax",
 			});
 
-			res.status(200).send("Sign in successful");
+			res.status(200).send({ user });
 		} catch (error) {
 			res.status(400).json({
 				message: error.message || "Internal server error",
@@ -59,7 +59,7 @@ export class AuthController {
 				sameSite: process.env.NODE_ENV == "production" ? "none" : "lax",
 			});
 
-			res.status(200).send("Sign up successful");
+			res.status(200).send({ user });
 		} catch (error) {
 			res.status(400).json({
 				message: error.message || "Internal server error",

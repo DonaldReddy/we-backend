@@ -24,12 +24,28 @@ export class BookService {
 		return book;
 	};
 
-	createBook = async ({ title, author, coverImage, description }) => {
+	getFeaturedBooks = async () => {
+		const books = await bookRepo.getFeaturedBooks();
+		return {
+			books,
+		};
+	};
+
+	createBook = async ({
+		title,
+		author,
+		coverImage,
+		description,
+		featured = false,
+		genre,
+	}) => {
 		const book = await bookRepo.createBook({
 			title,
 			author,
 			coverImage,
 			description,
+			featured,
+			genre: genre.split(","),
 		});
 		return book;
 	};

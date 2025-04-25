@@ -4,7 +4,7 @@ export class BookRepository {
 	getBooks = async (page, limit, search, filter, sortby) => {
 		const books = await prisma.book.findMany({
 			where: {
-				title: { contains: search },
+				title: { contains: search, mode: "insensitive" },
 			},
 			skip: (page - 1) * limit,
 			take: limit,
@@ -16,6 +16,7 @@ export class BookRepository {
 				coverImage: true,
 				description: true,
 				createdAt: true,
+				ratingCount: true,
 			},
 		});
 		return books;
@@ -34,6 +35,7 @@ export class BookRepository {
 				coverImage: true,
 				description: true,
 				createdAt: true,
+				ratingCount: true,
 			},
 		});
 		return book;
@@ -46,6 +48,29 @@ export class BookRepository {
 			},
 		});
 		return totalBooks;
+	};
+
+	getFeaturedBooks = async () => {
+		const books = await prisma.book.findMany({
+			where: {
+				featured: true,
+			},
+			orderBy: {
+				createdAt: "desc",
+			},
+			take: 10,
+			select: {
+				id: true,
+				title: true,
+				rating: true,
+				author: true,
+				coverImage: true,
+				description: true,
+				createdAt: true,
+				ratingCount: true,
+			},
+		});
+		return books;
 	};
 
 	createBook = async (data) => {

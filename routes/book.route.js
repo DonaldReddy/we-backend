@@ -7,6 +7,7 @@ const bookController = new BookController();
 const bookRouter = Router();
 
 bookRouter.get("/", bookController.getBooks);
+bookRouter.get("/featured", bookController.getFeaturedBooks);
 bookRouter.get("/:id", bookController.getBookById);
 
 bookRouter.post("/", isAdmin, bookController.createBook);

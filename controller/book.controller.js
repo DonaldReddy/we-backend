@@ -5,10 +5,10 @@ const bookService = new BookService();
 export class BookController {
 	getBooks = async (req, res) => {
 		try {
-			const { page = 1, limit = 10, search, filter, sortby } = req.query;
+			const { page = 1, limit = 10, search = "", filter, sortby } = req.query;
 			const books = await bookService.getBooks({
-				page,
-				limit,
+				page: parseInt(page),
+				limit: parseInt(limit),
 				search,
 				filter,
 				sortby,
@@ -36,11 +36,30 @@ export class BookController {
 		}
 	};
 
+	getFeaturedBooks = async (req, res) => {
+		try {
+			const books = await bookService.getFeaturedBooks();
+			return res.send(books);
+		} catch (error) {
+			res.status(400).json({
+				message: error.message || "Internal server error",
+			});
+		}
+	};
+
 	createBook = async (req, res) => {
 		try {
-			const { title, author, coverImage, description } = req.body;
+			const { title, author, coverImage, description, featured, genre } =
+				req.body;
 
-			if (!title || !author || !coverImage || !description) {
+			if (
+				!title ||
+				!author ||
+				!coverImage ||
+				!description ||
+				!featured ||
+				!genre
+			) {
 				return res.status(400).send("All fields are required");
 			}
 
@@ -49,6 +68,8 @@ export class BookController {
 				author,
 				coverImage,
 				description,
+				genre,
+				featured: featured === "YES" ? true : false,
 			});
 
 			return res.status(201).send(book);
