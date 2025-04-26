@@ -4,6 +4,8 @@
 
 # Backend for BookReview is a REST API built with Express.js and Prisma. It provides endpoints for managing users, books, and reviews. The API is designed to be used with a PostgreSQL database and includes JWT authentication for secure access.
 
+# Live Server is at https://we-backend-jt22.onrender.com , api calls may be slowed as the server goes down after 15 minutes of inactivity
+
 ## Setup
 
 1. Clone the repository
