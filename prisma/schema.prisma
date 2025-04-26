@@ -24,7 +24,7 @@ model Book {
   author      String
   rating      Float    @default(0)
   ratingCount Int      @default(0)
-  featured    Boolean  @default(false)
+  featured    IsFeatured @default(NO)
   genre       String[] @default([])
   description String
   coverImage  String
@@ -48,4 +48,9 @@ model Review {
 enum Role {
   USER
   ADMIN
+}
+
+enum IsFeatured {
+  YES
+  NO
 }

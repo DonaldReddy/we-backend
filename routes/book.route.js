@@ -11,5 +11,8 @@ bookRouter.get("/featured", bookController.getFeaturedBooks);
 bookRouter.get("/:id", bookController.getBookById);
 
 bookRouter.post("/", isAdmin, bookController.createBook);
+bookRouter.put("/:id", isAdmin, bookController.updateBook);
+
+bookRouter.delete("/:id", isAdmin, bookController.deleteBook);
 
 export { bookRouter };

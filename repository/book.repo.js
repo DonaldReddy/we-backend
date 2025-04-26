@@ -17,6 +17,7 @@ export class BookRepository {
 				description: true,
 				createdAt: true,
 				ratingCount: true,
+				featured: true,
 			},
 		});
 		return books;
@@ -53,7 +54,7 @@ export class BookRepository {
 	getFeaturedBooks = async () => {
 		const books = await prisma.book.findMany({
 			where: {
-				featured: true,
+				featured: "YES",
 			},
 			orderBy: {
 				createdAt: "desc",
@@ -75,6 +76,14 @@ export class BookRepository {
 
 	createBook = async (data) => {
 		const book = await prisma.book.create({
+			data,
+		});
+		return book;
+	};
+
+	updateBook = async (id, data) => {
+		const book = await prisma.book.update({
+			where: { id },
 			data,
 		});
 		return book;
@@ -105,5 +114,12 @@ export class BookRepository {
 				ratingCount: bookCount,
 			},
 		});
+	};
+
+	deleteBook = async (id) => {
+		const book = await prisma.book.delete({
+			where: { id },
+		});
+		return book;
 	};
 }

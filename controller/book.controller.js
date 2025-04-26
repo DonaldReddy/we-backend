@@ -69,7 +69,7 @@ export class BookController {
 				coverImage,
 				description,
 				genre,
-				featured: featured === "YES" ? true : false,
+				featured,
 			});
 
 			return res.status(201).send(book);
@@ -79,4 +79,45 @@ export class BookController {
 			});
 		}
 	};
+
+	updateBook = async (req, res) => {
+		try {
+			const { id } = req.params;
+			const { title, author, coverImage, description, featured } = req.body;
+
+			if (!title || !author || !coverImage || !description || !featured) {
+				return res.status(400).send("All fields are required");
+			}
+
+			const book = await bookService.updateBook(id, {
+				title,
+				author,
+				coverImage,
+				description,
+				featured,
+			});
+
+			return res.status(200).send(book);
+		} catch (error) {
+			res.status(400).json({
+				message: error.message || "Internal server error",
+			});
+		}
+	};
+
+	deleteBook = async (req, res) => {
+		try {
+			const { id } = req.params;
+			const book = await bookService.deleteBook(id);
+			if (!book) {
+				return res.status(404).send("Book not found");
+			}
+			return res.status(200).send(book);
+		} catch (error) {
+			res.status(400).json({
+				message: error.message || "Internal server error",
+			});
+		}
+	};
+
 }

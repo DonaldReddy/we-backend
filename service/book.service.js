@@ -49,4 +49,24 @@ export class BookService {
 		});
 		return book;
 	};
+
+	updateBook = async (
+		id,
+		{ title, author, coverImage, description, featured },
+	) => {
+		const book = await bookRepo.updateBook(id, {
+			title,
+			author,
+			coverImage,
+			description,
+			featured,
+		});
+		return book;
+	};
+
+	deleteBook = async (id) => {
+		const book = await bookRepo.deleteBook(id);
+		return book;
+	};
+
 }
