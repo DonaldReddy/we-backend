@@ -25,7 +25,7 @@ export class ReviewService {
 		return result;
 	};
 
-	refineReview = async (review) => {
+	refineReview = async ({ comment, bookTitle, bookAuthor }) => {
 		try {
 			const response = await fetch(
 				"https://openrouter.ai/api/v1/chat/completions",
@@ -40,10 +40,16 @@ export class ReviewService {
 						messages: [
 							{
 								role: "user",
-								content:
-									`Refine the following book review to increase its word count by about 10%, but cap the total to 100 words. ` +
-									`Keep the meaning and tone consistent, and ensure grammatical correctness and readability. ` +
-									`Return only the refined review, wrapped in # both at the start and end:\n\n${review}`,
+								content: `You are an expert editor. Your task is to refine the following book review for the book titled "${bookTitle}" by ${bookAuthor}:
+										- Expand the review slightly by approximately 10% to enrich its details or descriptions.
+										- Keep the total word count at or below 100 words.
+										- Maintain the original tone, meaning, and sentiment.
+										- Ensure excellent grammar, natural flow, and readability.
+										- Do not introduce any new facts or opinions not present in the original comment.
+										- Only return the refined review, wrapped with a single '#' character at the beginning and end.
+
+										Here is the review:
+										${comment}`,
 							},
 						],
 					}),
@@ -66,7 +72,7 @@ export class ReviewService {
 			return match ? match[1].trim() : refined.trim();
 		} catch (error) {
 			console.error("Review refinement failed:", error);
-			return review; // fallback to original review
+			return comment; // fallback to original review
 		}
 	};
 }

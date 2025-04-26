@@ -10,7 +10,12 @@ export class ReviewRepository {
 				bookId,
 			},
 			include: {
-				user: true,
+				user: {
+					select: {
+						id: true,
+						name: true,
+					},
+				},
 			},
 			orderBy: {
 				createdAt: "desc",

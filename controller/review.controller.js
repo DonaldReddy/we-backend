@@ -60,19 +60,23 @@ export class ReviewController {
 
 	refineBookReview = async (req, res) => {
 		try {
-			const { review } = req.body;
-			if (!review) {
-				return res.status(400).json({ message: "Review is required" });
+			const { comment, bookTitle, bookAuthor } = req.body;
+			if (!comment || !bookTitle || !bookAuthor) {
+				return res.status(400).json({ message: "All fields are required" });
 			}
 
-			if (review.split(" ").length < 20) {
+			if (comment.split(" ").length < 20) {
 				return res
 					.status(400)
 					.json({ message: "Review must be at least 20 words" });
 			}
 
-			const refinedComment = await reviewService.refineReview(review);
-			res.status(200).send(refinedComment);
+			const refinedComment = await reviewService.refineReview({
+				comment,
+				bookTitle,
+				bookAuthor,
+			});
+			res.status(200).send({ refinedComment });
 		} catch (error) {
 			res.status(400).json({
 				message: error.message || "Internal server error",

@@ -2,7 +2,6 @@ import { connectToDatabase } from "./database/dbConnect.js";
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import { jwtAuthentication } from "./middleware/jwtAuthentication.js";
 import { authRouter } from "./routes/auth.route.js";
 import { userRouter } from "./routes/user.route.js";
 import { bookRouter } from "./routes/book.route.js";
@@ -21,8 +20,6 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use("/api/v1/auth", authRouter);
-
-app.use(jwtAuthentication);
 
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/books", bookRouter);

@@ -2,12 +2,47 @@ import prisma from "../database/dbConnect.js";
 
 export class BookRepository {
 	getBooks = async (page, limit, search, filter, sortby) => {
+		const filterObj = {};
+
+		if (filter) {
+			if (filter === "rating=4") {
+				filterObj.rating = { gte: 4 };
+			}
+			if (filter === "rating=3") {
+				filterObj.rating = { gte: 3 };
+			}
+			if (filter === "rating=2") {
+				filterObj.rating = { gte: 2 };
+			}
+			if (filter === "rating=1") {
+				filterObj.rating = { gte: 1 };
+			}
+		}
+
+		const sortObj = {};
+		if (sortby) {
+			if (sortby === "rating") {
+				sortObj.rating = "desc";
+			}
+			if (sortby === "createdAt") {
+				sortObj.createdAt = "desc";
+			}
+			if (sortby === "title") {
+				sortObj.title = "asc";
+			}
+			if (sortby === "author") {
+				sortObj.author = "asc";
+			}
+		}
+
 		const books = await prisma.book.findMany({
 			where: {
 				title: { contains: search, mode: "insensitive" },
+				...filterObj,
 			},
 			skip: (page - 1) * limit,
 			take: limit,
+			orderBy: sortObj,
 			select: {
 				id: true,
 				title: true,
